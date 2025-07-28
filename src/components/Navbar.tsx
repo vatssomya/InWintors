@@ -5,12 +5,15 @@ import { useTheme } from '../contexts/ThemeContext'
 import ThemeToggle from './ThemeToggle'
 
 const NavContainer = styled.nav`
-  background-color: ${props => props.theme.colors.background};
-  box-shadow: ${props => props.theme.shadows.sm};
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1rem 2rem;
   position: sticky;
   top: 0;
   z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 `
 
 const NavBrand = styled.div`
@@ -19,10 +22,15 @@ const NavBrand = styled.div`
 `
 
 const BrandLink = styled(Link)`
-  color: ${props => props.theme.colors.text.primary};
+  color: #00ffff;
   text-decoration: none;
+  text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+  font-weight: 700;
+  letter-spacing: 1px;
+  
   &:hover {
-    color: ${props => props.theme.colors.primary};
+    color: #ffffff;
+    text-shadow: 0 0 15px #ffffff, 0 0 25px #ffffff, 0 0 35px #ffffff;
   }
 `
 
@@ -39,20 +47,30 @@ const NavMenu = styled.div`
 `
 
 const NavLink = styled(Link)<{ $isActive: boolean }>`
-  color: ${props => props.$isActive ? props.theme.colors.primary : props.theme.colors.text.primary};
+  color: ${props => props.$isActive ? '#00ffff' : 'rgba(255, 255, 255, 0.7)'};
   text-decoration: none;
   padding: 0.5rem 1rem;
-  border-radius: ${props => props.theme.borderRadius.sm};
+  border-radius: 8px;
   transition: all 0.3s ease;
+  font-weight: ${props => props.$isActive ? '600' : '400'};
+  text-shadow: ${props => props.$isActive 
+    ? '0 0 10px #00ffff, 0 0 20px #00ffff' 
+    : 'none'
+  };
+  letter-spacing: 0.5px;
 
   &:hover {
-    background-color: ${props => props.theme.colors.hover};
-    color: ${props => props.theme.colors.primary};
+    background: rgba(0, 255, 255, 0.1);
+    color: #00ffff;
+    transform: translateY(-1px);
+    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
   }
 
   ${props => props.$isActive && `
-    background-color: ${props.theme.colors.surface};
-    font-weight: 500;
+    background: rgba(0, 255, 255, 0.15);
+    font-weight: 600;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
   `}
 `
 
@@ -72,22 +90,22 @@ function Navbar(): ReactElement {
   const { theme } = useTheme()
 
   return (
-    <NavContainer theme={theme}>
+    <NavContainer>
       <NavContent>
         <NavBrand>
-          <BrandLink to="/" theme={theme}>InWintors</BrandLink>
+          <BrandLink to="/">InWintors</BrandLink>
         </NavBrand>
         <NavMenu>
-          <NavLink to="/" $isActive={location.pathname === '/'} theme={theme}>
+          <NavLink to="/" $isActive={location.pathname === '/'}>
             Home
           </NavLink>
-          <NavLink to="/dashboard" $isActive={location.pathname === '/dashboard'} theme={theme}>
+          <NavLink to="/dashboard" $isActive={location.pathname === '/dashboard'}>
             Dashboard
           </NavLink>
-          <NavLink to="/about" $isActive={location.pathname === '/about'} theme={theme}>
+          <NavLink to="/about" $isActive={location.pathname === '/about'}>
             About
           </NavLink>
-          <NavLink to="/contact" $isActive={location.pathname === '/contact'} theme={theme}>
+          <NavLink to="/contact" $isActive={location.pathname === '/contact'}>
             Contact
           </NavLink>
           <ThemeToggle />

@@ -1,5 +1,5 @@
 import { type ReactElement } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { useTheme } from '../contexts/ThemeContext'
 import Navbar from '../components/Navbar'
@@ -12,12 +12,12 @@ const LayoutContainer = styled.div`
   color: ${props => props.theme.colors.text.primary};
 `
 
-const MainContent = styled.main`
+const MainContent = styled.main<{ $isHome: boolean }>`
   flex: 1;
   width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  max-width: ${props => props.$isHome ? '100%' : '1280px'};
+  margin: ${props => props.$isHome ? '0' : '0 auto'};
+  padding: ${props => props.$isHome ? '0' : '2rem'};
 `
 
 const Footer = styled.footer`
@@ -34,16 +34,20 @@ const Footer = styled.footer`
 
 function MainLayout(): ReactElement {
   const { theme } = useTheme()
+  const location = useLocation()
+  const isHome = location.pathname === '/'
 
   return (
     <LayoutContainer theme={theme}>
       <Navbar />
-      <MainContent>
+      <MainContent $isHome={isHome}>
         <Outlet />
       </MainContent>
-      <Footer theme={theme}>
-        <p>© 2025 InWintors. Built with React</p>
-      </Footer>
+      {!isHome && (
+        <Footer theme={theme}>
+          <p>© 2025 InWintors. Built with React</p>
+        </Footer>
+      )}
     </LayoutContainer>
   )
 }
